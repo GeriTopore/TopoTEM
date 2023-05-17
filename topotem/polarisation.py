@@ -562,8 +562,13 @@ def plot_polarisation_vectors(
         sm.set_array([])
         cbar = plt.colorbar(mappable=sm, fraction=0.046, pad=0.04,
                             drawedges=False)
-        cbar.set_ticks(ticks)
-        cbar.ax.set_ylabel(vector_label)
+        
+        try:
+            cbar.set_ticks(ticks)
+            cbar.ax.set_ylabel(vector_label)
+        except TypeError:
+            print("Why is this happening??")
+            pass
 
     # elif plot_style == "polar_colorwheel":
     #     ax2 = fig.add_subplot(444)
