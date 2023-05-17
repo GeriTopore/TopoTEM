@@ -2,10 +2,8 @@
 import numpy as np
 from hyperspy._signals.complex_signal2d import ComplexSignal2D
 
-from temul.external.atomap_devel_012.initial_position_finding import (
-    add_atoms_with_gui)
-from temul.external.atomap_devel_012.atom_finding_refining import (
-    _make_circular_mask)
+from atomap.initial_position_finding import add_atoms_with_gui
+from atomap.atom_finding_refining import _make_circular_mask
 
 
 def choose_points_on_image(image, norm='linear', distance_threshold=4):

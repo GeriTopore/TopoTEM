@@ -7,9 +7,9 @@ from matplotlib.cm import ScalarMappable
 from decimal import Decimal
 import colorcet as cc
 from matplotlib_scalebar.scalebar import ScaleBar
-from temul.signal_plotting import (
-    get_polar_2d_colorwheel_color_list,
-    _make_color_wheel)
+# from temul.signal_plotting import (
+#     get_polar_2d_colorwheel_color_list,
+#     _make_color_wheel)
 
 
 # good to have an example of getting atom_positions_A and B from sublattice
@@ -417,8 +417,8 @@ def plot_polarisation_vectors(
     vector_label = angle_label(
         vector_rep=vector_rep, units=units, degrees=degrees)
 
-    if plot_style == "polar_colorwheel":
-        color_list = get_polar_2d_colorwheel_color_list(u, -v)
+    # if plot_style == "polar_colorwheel":
+    #     color_list = get_polar_2d_colorwheel_color_list(u, -v)
 
     # change all vector magnitudes to the same size
     if unit_vector:
@@ -565,10 +565,10 @@ def plot_polarisation_vectors(
         cbar.set_ticks(ticks)
         cbar.ax.set_ylabel(vector_label)
 
-    elif plot_style == "polar_colorwheel":
-        ax2 = fig.add_subplot(444)
-        _make_color_wheel(ax2, rotation=None)
-        ax2.set_axis_off()
+    # elif plot_style == "polar_colorwheel":
+    #     ax2 = fig.add_subplot(444)
+    #     _make_color_wheel(ax2, rotation=None)
+    #     ax2.set_axis_off()
 
     # plt.tight_layout()
     if save is not None:
