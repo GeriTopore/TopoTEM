@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "topotem-test"
+name = "TopoTEM"
 version = "0.1.0"
 description = ""
-authors = ["GeriTopore <geritopore@gmail.com>"]
+authors = ["GeriTopore <g.topore22@imperial.ac.uk>"]
 readme = "README.md"
-packages = [{include = "topotem_test"}]
+packages = [{include = "topotem"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
