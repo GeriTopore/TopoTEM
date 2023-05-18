@@ -749,6 +749,48 @@ tests = ["matplotlib (>=3.1)", "pooch", "pytest (>=3.6)", "pytest-instafail", "p
 usid = ["pyUSID (>=0.0.7)", "sidpy"]
 
 [[package]]
+name = "hyperspy-gui-ipywidgets"
+version = "1.5.0"
+description = "ipywidgets GUI elements for HyperSpy."
+category = "main"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "hyperspy_gui_ipywidgets-1.5.0-py3-none-any.whl", hash = "sha256:ef0d4d0ca17aedb5f06dda79b0347a51e39829a2a4c639689c8904ee29407c24"},
+    {file = "hyperspy_gui_ipywidgets-1.5.0.tar.gz", hash = "sha256:e5b59279ac15cec93c7699295bb904d967a545bf3e341356ffc6753f4c7f3a2d"},
+]
+
+[package.dependencies]
+hyperspy = ">=1.7"
+ipywidgets = ">=7.0"
+link-traits = "*"
+
+[package.extras]
+coverage = ["codecov", "pytest-cov"]
+tests = ["pytest"]
+
+[[package]]
+name = "hyperspy-gui-traitsui"
+version = "1.5.2"
+description = "traitsui GUI elements for HyperSpy."
+category = "main"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "hyperspy_gui_traitsui-1.5.2-py3-none-any.whl", hash = "sha256:daa94fbe725202b13657187ab626d758a015c0d6caa4fdd570e86f1eeddcc457"},
+    {file = "hyperspy_gui_traitsui-1.5.2.tar.gz", hash = "sha256:d7031646f3f9c5c4174fde3bc5578b94ba4cbc1c384bb06b936738632f02978d"},
+]
+
+[package.dependencies]
+hyperspy = ">=1.7.0"
+traits = ">=5.0"
+traitsui = ">=6.1"
+
+[package.extras]
+coverage = ["codecov", "pytest-cov"]
+tests = ["pytest"]
+
+[[package]]
 name = "idna"
 version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -939,6 +981,28 @@ test = ["pytest (<7.1)", "pytest-asyncio", "testpath"]
 test-extra = ["curio", "matplotlib (!=3.2.0)", "nbformat", "numpy (>=1.21)", "pandas", "pytest (<7.1)", "pytest-asyncio", "testpath", "trio"]
 
 [[package]]
+name = "ipywidgets"
+version = "8.0.6"
+description = "Jupyter interactive widgets"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "ipywidgets-8.0.6-py3-none-any.whl", hash = "sha256:a60bf8d2528997e05ac83fd19ea2fbe65f2e79fbe1b2b35779bdfc46c2941dcc"},
+    {file = "ipywidgets-8.0.6.tar.gz", hash = "sha256:de7d779f2045d60de9f6c25f653fdae2dba57898e6a1284494b3ba20b6893bb8"},
+]
+
+[package.dependencies]
+ipykernel = ">=4.5.1"
+ipython = ">=6.1.0"
+jupyterlab-widgets = ">=3.0.7,<3.1.0"
+traitlets = ">=4.3.1"
+widgetsnbextension = ">=4.0.7,<4.1.0"
+
+[package.extras]
+test = ["ipykernel", "jsonschema", "pytest (>=3.6.0)", "pytest-cov", "pytz"]
+
+[[package]]
 name = "jedi"
 version = "0.18.2"
 description = "An autocompletion tool for Python that can be used for text editors."
@@ -1034,6 +1098,18 @@ docs = ["myst-parser", "sphinx-autodoc-typehints", "sphinxcontrib-github-alt", "
 test = ["ipykernel", "pre-commit", "pytest", "pytest-cov", "pytest-timeout"]
 
 [[package]]
+name = "jupyterlab-widgets"
+version = "3.0.7"
+description = "Jupyter interactive widgets for JupyterLab"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "jupyterlab_widgets-3.0.7-py3-none-any.whl", hash = "sha256:c73f8370338ec19f1bec47254752d6505b03601cbd5a67e6a0b184532f73a459"},
+    {file = "jupyterlab_widgets-3.0.7.tar.gz", hash = "sha256:c3a50ed5bf528a0c7a869096503af54702f86dda1db469aee1c92dc0c01b43ca"},
+]
+
+[[package]]
 name = "kiwisolver"
 version = "1.4.4"
 description = "A fast implementation of the Cassowary constraint solver"
@@ -1126,6 +1202,23 @@ files = [
 [package.extras]
 lint = ["pre-commit (>=3.1)"]
 test = ["pytest (>=7.2)", "pytest-cov (>=4.0)"]
+
+[[package]]
+name = "link-traits"
+version = "1.0.3"
+description = "A fork to traitlets' link and dlink to link traits in addition to traitlets."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "link_traits-1.0.3.tar.gz", hash = "sha256:4e1f104ce3bcb9a1c16f838d19ff45ec7be9704df6565690de19b0a05d5820a9"},
+]
+
+[package.dependencies]
+traits = "*"
+
+[package.extras]
+test = ["pytest"]
 
 [[package]]
 name = "llvmlite"
@@ -1874,6 +1967,36 @@ doc = ["nbsite", "sphinx-ioam-theme"]
 tests = ["flake8", "pytest"]
 
 [[package]]
+name = "pyface"
+version = "8.0.0"
+description = "Traits-capable windowing framework"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyface-8.0.0-py3-none-any.whl", hash = "sha256:f636ffd4b9271767b9c06f67f0b407e04cf79f1ff2b6717a8a106233c48b9cc0"},
+    {file = "pyface-8.0.0.tar.gz", hash = "sha256:7e13618347b7a648ed20cdbd4fd1a51648f5010291f35e4e0ff1bf70a720cbf8"},
+]
+
+[package.dependencies]
+importlib-metadata = {version = ">=3.6", markers = "python_version < \"3.10\""}
+importlib-resources = {version = ">=1.1.0", markers = "python_version < \"3.9\""}
+traits = ">=6.2"
+
+[package.extras]
+docs = ["enthought-sphinx-theme", "sphinx", "sphinx-copybutton"]
+examples = ["numpy", "traitsui"]
+numpy = ["numpy"]
+pillow = ["pillow"]
+pyqt5 = ["pygments", "pyqt5"]
+pyqt6 = ["pygments", "pyqt6"]
+pyside2 = ["pygments", "pyside2"]
+pyside6 = ["pygments", "pyside6"]
+test = ["packaging"]
+traitsui = ["traitsui"]
+wx = ["numpy", "wxPython (>=4)"]
+
+[[package]]
 name = "pygments"
 version = "2.15.1"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -2572,6 +2695,34 @@ examples = ["numpy", "pillow"]
 test = ["Cython", "PySide2", "PySide6", "Sphinx (>=2.1.0)", "flake8", "flake8-ets", "mypy", "numpy", "pyface", "setuptools", "traitsui"]
 
 [[package]]
+name = "traitsui"
+version = "7.4.3"
+description = "traitsui: traits-capable user interfaces"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "traitsui-7.4.3-py3-none-any.whl", hash = "sha256:e9ee458c0d18b486ce95bf31aa5fd1cf7545ec077ba10e4e7ad6185d762b7b8b"},
+    {file = "traitsui-7.4.3.tar.gz", hash = "sha256:db32517e9622a0580c23209e13f8032cea00e61c6774936709ff45e76335d5b9"},
+]
+
+[package.dependencies]
+pyface = ">=7.4.1"
+traits = ">=6.2.0"
+
+[package.extras]
+demo = ["configobj", "docutils"]
+docs = ["enthought-sphinx-theme", "sphinx", "sphinx-copybutton"]
+editors = ["numpy", "pandas"]
+examples = ["apptools", "h5py", "numpy", "pandas", "pillow", "tables"]
+pyqt = ["pygments", "pyqt (>=4.10)"]
+pyqt5 = ["pygments", "pyqt5"]
+pyside2 = ["pygments", "pyside2"]
+pyside6 = ["pygments", "pyside6 (!=6.2.2,!=6.2.2.1,!=6.2.3,!=6.2.4,!=6.3.0,<6.4.0)", "pyside6 (<6.4.0)"]
+test = ["numpy", "packaging"]
+wx = ["numpy", "wxpython (>=4)"]
+
+[[package]]
 name = "typing-extensions"
 version = "4.5.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -2614,6 +2765,18 @@ files = [
 ]
 
 [[package]]
+name = "widgetsnbextension"
+version = "4.0.7"
+description = "Jupyter interactive widgets for Jupyter Notebook"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "widgetsnbextension-4.0.7-py3-none-any.whl", hash = "sha256:be3228a73bbab189a16be2d4a3cd89ecbd4e31948bfdc64edac17dcdee3cd99c"},
+    {file = "widgetsnbextension-4.0.7.tar.gz", hash = "sha256:ea67c17a7cd4ae358f8f46c3b304c40698bc0423732e3f273321ee141232c8be"},
+]
+
+[[package]]
 name = "zarr"
 version = "2.14.2"
 description = "An implementation of chunked, compressed, N-dimensional arrays for Python"
@@ -2653,4 +2816,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "45367ed386699af54af33aba54a2f0b8c907fd40b14461f035339083579a5ebc"
+content-hash = "f34989c510b2eef4d9140c98a974fbf326d786c3c43636e15c7192354a166d0f"
