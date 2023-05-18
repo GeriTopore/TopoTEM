@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "topotem-test"
+version = "0.1.0"
+description = ""
+authors = ["GeriTopore <geritopore@gmail.com>"]
+readme = "README.md"
+packages = [{include = "topotem_test"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+hyperspy = "^1.7.5"
+atomap = "^0.3.3"
+matplotlib-scalebar = "^0.8.1"
+
+[[tool.poetry.source]]
+name = "conda"
+url = "https://anaconda.org/"
+default = false
+secondary = false
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
