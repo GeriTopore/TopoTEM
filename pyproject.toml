@@ -11,6 +11,8 @@ python = "^3.8"
 hyperspy = "^1.7.5"
 atomap = "^0.3.3"
 matplotlib-scalebar = "^0.8.1"
+colorcet = "^3.0.1"
+chardet = "^5.1.0"
 
 [[tool.poetry.source]]
 name = "conda"
