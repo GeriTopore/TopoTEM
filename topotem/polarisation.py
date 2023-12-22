@@ -7,6 +7,8 @@ from matplotlib.cm import ScalarMappable
 from decimal import Decimal
 import colorcet as cc
 from matplotlib_scalebar.scalebar import ScaleBar
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.ticker import AutoLocator
 # from temul.signal_plotting import (
 #     get_polar_2d_colorwheel_color_list,
 #     _make_color_wheel)
@@ -417,8 +419,8 @@ def plot_polarisation_vectors(
     vector_label = angle_label(
         vector_rep=vector_rep, units=units, degrees=degrees)
 
-    # if plot_style == "polar_colorwheel":
-    #     color_list = get_polar_2d_colorwheel_color_list(u, -v)
+    if plot_style == "polar_colorwheel":
+        color_list = get_polar_2d_colorwheel_color_list(u, -v)
 
     # change all vector magnitudes to the same size
     if unit_vector:
@@ -461,7 +463,7 @@ def plot_polarisation_vectors(
 
         if cmap is None:
             cmap = 'viridis'
-        ax.quiver(
+        quiv = ax.quiver(
             x, y, u, v, vector_rep_val, color=color, cmap=cmap, norm=norm,
             units=quiver_units, pivot=pivot, angles=angles,
             scale_units=scale_units, scale=scale, headwidth=headwidth,
@@ -558,17 +560,29 @@ def plot_polarisation_vectors(
     if (plot_style == "colormap" or plot_style == "colorwheel" or
             plot_style == "contour"):
 
+        # sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+        # sm.set_array([])
+        # cbar = plt.colorbar(mappable=sm, fraction=0.046, pad=0.04,
+        #                     drawedges=False)
+        
+        # try:
+        #     cbar.set_ticks(ticks)
+        #     cbar.ax.set_ylabel(vector_label)
+        # except TypeError:
+        #     print("Why is this happening??")
+        #     pass
+        
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
-        cbar = plt.colorbar(mappable=sm, fraction=0.046, pad=0.04,
-                            drawedges=False)
         
-        try:
-            cbar.set_ticks(ticks)
-            cbar.ax.set_ylabel(vector_label)
-        except TypeError:
-            print("Why is this happening??")
-            pass
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes('right', size='5%', pad=0.1)
+        cbar = plt.colorbar(sm, 
+                            cax=cax, 
+                            drawedges=False, 
+                            )
+        cbar.locator = AutoLocator()
+        cbar.ax.set_ylabel(vector_label)
 
     # elif plot_style == "polar_colorwheel":
     #     ax2 = fig.add_subplot(444)
