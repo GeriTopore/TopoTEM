@@ -10,6 +10,7 @@ from matplotlib_scalebar.scalebar import ScaleBar
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.ticker import AutoLocator
 from matplotlib.colors import hsv_to_rgb
+import math
 
 
 # good to have an example of getting atom_positions_A and B from sublattice
@@ -143,6 +144,54 @@ def correct_off_tilt_vectors(u, v, method="com"):
     if "av" in method.lower():
         u_corr, v_corr = corrected_vectors_via_average(u, v)
     return (u_corr, v_corr)
+
+
+def _get_rgb_phase_magnitude_array(
+        phase, magnitude, rotation=None,
+        magnitude_limits=None, max_phase=2 * np.pi):
+    phase = _find_phase(phase, rotation=rotation, max_phase=max_phase)
+    phase = phase / (2 * np.pi)
+
+    if magnitude_limits is not None:
+        np.clip(magnitude, magnitude_limits[0], magnitude_limits[1],
+                out=magnitude)
+    magnitude_max = magnitude.max()
+    if magnitude_max == 0:
+        magnitude_max = 1
+    magnitude = magnitude / magnitude_max
+    S = np.ones_like(phase)
+    HSV = np.dstack((phase, S, magnitude))
+    RGB = hsv_to_rgb(HSV)
+    return (RGB)
+
+
+def _make_color_wheel(ax, rotation=None):
+    x, y = np.mgrid[-2.0:2.0:500j, -2.0:2.0:500j]
+    r = (x ** 2 + y ** 2) ** 0.5
+    t = np.arctan2(x, y)
+    del x, y
+    if rotation is not None:
+        t += math.radians(rotation)
+        t = (t + np.pi) % (2 * np.pi) - np.pi
+
+    r_masked = np.ma.masked_where(
+        (2.0 < r) | (r < 1.0), r)
+    r_masked -= 1.0
+
+    mask = r_masked.mask
+    r_masked.data[r_masked.mask] = r_masked.mean()
+    rgb_array = _get_rgb_phase_magnitude_array(t, r_masked.data)
+    rgb_array = np.dstack((rgb_array, np.invert(mask)))
+
+    ax.imshow(rgb_array, interpolation='quadric', origin='lower')
+    # ax.set_axis_off()
+    
+
+def _find_phase(phase, rotation=None, max_phase=2 * np.pi):
+    if rotation is not None:
+        phase = (phase + math.radians(rotation))
+    phase = phase % max_phase
+    return phase
 
 
 def create_rgb_array():
@@ -631,12 +680,12 @@ def plot_polarisation_vectors(
         cbar.locator = AutoLocator()
         cbar.ax.set_ylabel(vector_label)
 
-    # elif plot_style == "polar_colorwheel":
-    #     ax2 = fig.add_subplot(444)
-    #     _make_color_wheel(ax2, rotation=None)
-    #     ax2.set_axis_off()
+    elif plot_style == "polar_colorwheel":
+        ax2 = fig.add_subplot(444)
+        _make_color_wheel(ax2, rotation=None)
+        ax2.set_axis_off()
 
-    # plt.tight_layout()
+    plt.tight_layout()
     if save is not None:
         plt.savefig(fname=save + '_' + plot_style + '.png',
                     transparent=True, frameon=False, bbox_inches='tight',
