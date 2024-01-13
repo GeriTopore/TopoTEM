@@ -4,6 +4,7 @@ from matplotlib.colors import from_levels_and_colors
 
 from topotem.dummy_data import get_polarisation_dummy_dataset
 from topotem.polarisation import plot_polarisation_vectors
+from topotem.polarisation import get_angles_from_uv
 
 atom_lattice = get_polarisation_dummy_dataset(image_noise=True)
 sublatticeA = atom_lattice.sublattice_list[0]
@@ -26,6 +27,8 @@ s_p = sublatticeA.get_polarization_from_second_sublattice(
 vector_list = s_p.metadata.vector_list
 x, y = [i[0] for i in vector_list], [i[1] for i in vector_list]
 u, v = [i[2] for i in vector_list], [i[3] for i in vector_list]
+angles = get_angles_from_uv(u, v, degrees=True)
+# print(angles)
 
 # Vector magnitude plot with red arrows:
 
@@ -39,8 +42,14 @@ u, v = [i[2] for i in vector_list], [i[3] for i in vector_list]
 
 plot_polarisation_vectors(x, y, u, v, image=image,
                           unit_vector=False, save=None,
-                          plot_style='colormap', monitor_dpi=50,
-                          overlay=False, cmap='viridis')
+                          plot_style='triangles', monitor_dpi=50,
+                          overlay=True, 
+                          cmap='bwr', 
+                          vector_rep='angle',
+                          magnitude_multiplier=35,
+                          triangle_base_length=0.2,
+                        #   degrees=True,
+                          )
 plt.show()
 
 print('Test successful.')
