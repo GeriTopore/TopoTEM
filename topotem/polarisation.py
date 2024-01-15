@@ -10,6 +10,8 @@ from matplotlib_scalebar.scalebar import ScaleBar
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.ticker import AutoLocator
 from matplotlib.colors import hsv_to_rgb
+from matplotlib.patches import Polygon
+from matplotlib.collections import PatchCollection
 import math
 
 
@@ -253,7 +255,8 @@ def plot_polarisation_vectors(
         antialiased=False, levels=20, remove_vectors=False,
         quiver_units='width', pivot='middle', angles='xy',
         scale_units='xy', scale=None, headwidth=3.0, headlength=5.0,
-        headaxislength=4.5, width=None, minshaft=1, minlength=1):
+        headaxislength=4.5, width=None, minshaft=1, minlength=1, magnitude_multiplier=None, 
+        triangle_base_length=5, magnitude_legend=False):
     """
     Plot the polarisation vectors. These can be found with
     ``find_polarisation_vectors()`` or Atomap's
@@ -499,6 +502,7 @@ def plot_polarisation_vectors(
         raise ValueError("``image`` must be a 2D numpy array or 2D Hyperspy "
                          "Signal")
 
+    x, y = np.array(x), np.array(y)
     u, v = np.array(u), np.array(v)
 
     if sampling is not None:
@@ -511,7 +515,7 @@ def plot_polarisation_vectors(
         # -v because in STEM the origin is top left
         vector_rep_val = get_angles_from_uv(u, -v, degrees=degrees,
                                             angle_offset=angle_offset)
-
+    
     vector_label = angle_label(
         vector_rep=vector_rep, units=units, degrees=degrees)
 
@@ -566,14 +570,6 @@ def plot_polarisation_vectors(
             alpha=alpha, headlength=headlength, headaxislength=headaxislength,
             width=width, minshaft=minshaft, minlength=minlength)
 
-        # norm = colors.Normalize(vmin=min_val, vmax=max_val)
-        # sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-        # sm.set_array([])
-        # cbar = plt.colorbar(mappable=sm, fraction=0.046, pad=0.04,
-        #                     drawedges=False)
-        # cbar.set_ticks(ticks)
-        # cbar.ax.set_ylabel(vector_label)
-
     elif plot_style == "colorwheel":
 
         if vector_rep != "angle":
@@ -614,12 +610,6 @@ def plot_polarisation_vectors(
                 headlength=headlength, headaxislength=headaxislength,
                 minshaft=minshaft, minlength=minlength)
 
-        # cbar = plt.colorbar(mappable=contour_map, fraction=0.046, pad=0.04,
-        #                     drawedges=False)
-        # cbar.ax.tick_params(labelsize=14)
-        # cbar.set_ticks(ticks)
-        # cbar.ax.set_ylabel(vector_label, fontsize=14)
-
     elif plot_style == "polar_colorwheel":
 
         ax.quiver(
@@ -629,6 +619,68 @@ def plot_polarisation_vectors(
             headaxislength=headaxislength, minshaft=minshaft,
             minlength=minlength)
 
+    elif plot_style == 'triangles':
+        # Plot with isosceles triangles
+        # Create patches for each vector in the vector field
+        magnitude = get_vector_magnitudes(u, v)
+        angle = get_angles_from_uv(u, v, degrees=degrees, angle_offset=angle_offset)
+        limits = np.array([x.min(), x.max(), y.min(), y.max()])
+        patches = []
+        for i in range(len(x)):
+            triangle = _vector_to_triangle(magnitude[i], 
+                                           angle[i], 
+                                           magnitude_multiplier=magnitude_multiplier, 
+                                           base_length=triangle_base_length)
+            triangle_center = [x[i], y[i]]
+            triangle.set_xy(triangle_center + triangle.get_xy())
+            patches.append(triangle)
+            
+
+        # # Create a PatchCollection and add it to the axis
+        collection = PatchCollection(patches, cmap=cmap, alpha=0.7)
+        if vector_rep == "magnitude":
+            collection.set_array(magnitude.flatten())
+        else:
+            collection.set_array(angle.flatten())
+        ax.add_collection(collection)
+        
+        if magnitude_legend:
+            # Making magnitude legend:
+            # Sample 4 magnitudes from your data
+            sample_magnitudes = np.linspace(magnitude.min(), magnitude.max(), 4)
+
+            # Define in figure coordinates (0,0 is bottom left, 1,1 is top right) where the triangles should be plotted
+            x_positions = np.linspace(0.6, 1.0, 4)  # adjust as needed
+            y_positions = np.array([-0.07] * 4)  # adjust as needed
+
+            # Create the triangles and add them to the plot
+            for i in range(len(sample_magnitudes)):
+                triangle = _vector_to_triangle(sample_magnitudes[i], 
+                                            np.pi/2,  # make the triangle point upwards
+                                            magnitude_multiplier=magnitude_multiplier, 
+                                            base_length=triangle_base_length, 
+                                            transform=ax.transAxes,
+                                            for_legend=True,
+                                            )
+                current_pos = triangle.get_xy()
+                normed_pos = current_pos / np.array([x.max(), y.max()])
+                triangle.set_xy(normed_pos + np.array([x_positions[i], y_positions[i]]))
+
+                
+                ax.add_patch(triangle)
+
+            # Add the text below each triangle
+            for mag, x, y in zip(sample_magnitudes, x_positions, y_positions):
+                ax.annotate(f'{mag:.2f}', (x, y-0.05), xycoords='axes fraction', ha='center')
+            
+        ax.set_title('Isosceles Triangles')
+        ax.set_xlim(limits[:2])
+        ax.set_ylim(limits[2:])
+        
+
+            
+        for mag, x, y in zip(sample_magnitudes, x_positions, y_positions):
+            ax.annotate(f'{mag:.2f}', (x, y-0.05), xycoords='axes fraction', ha='center')
     else:
         raise NameError("The plot_style you have chosen is not available.")
 
@@ -654,19 +706,7 @@ def plot_polarisation_vectors(
 
     # colorbars
     if (plot_style == "colormap" or plot_style == "colorwheel" or
-            plot_style == "contour"):
-
-        # sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-        # sm.set_array([])
-        # cbar = plt.colorbar(mappable=sm, fraction=0.046, pad=0.04,
-        #                     drawedges=False)
-        
-        # try:
-        #     cbar.set_ticks(ticks)
-        #     cbar.ax.set_ylabel(vector_label)
-        # except TypeError:
-        #     print("Why is this happening??")
-        #     pass
+            plot_style == "contour" or plot_style == "triangles"):
         
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
@@ -691,6 +731,34 @@ def plot_polarisation_vectors(
                     transparent=True, frameon=False, bbox_inches='tight',
                     pad_inches=None, dpi=300, labels=False)
     return ax
+
+def _vector_to_triangle(magnitude, angle, base_length=5, magnitude_multiplier=30, transform=None, for_legend=False):
+    # Create an isosceles triangle based on vector properties
+    height = magnitude * magnitude_multiplier  # Scale the height linearly with magnitude
+    base = base_length * magnitude_multiplier  # Set the base length of the triangle
+
+    # Define the vertices of the triangle
+    if for_legend:
+        vertices = np.array([
+            [0, -height],  # Shift the y-coordinate of the bottom vertex
+            [base / 2, 0],  # Shift the y-coordinate of the top right vertex
+            [-base / 2, 0]  # Shift the y-coordinate of the top left vertex
+        ])
+    else:
+        vertices = np.array([
+            [0, -height / 2],
+            [base / 2, height / 2],
+            [-base / 2, height / 2]
+        ])
+
+    # Rotate the triangle based on the vector angle
+    rotation_matrix = np.array([
+        [np.cos(angle+np.pi/2), -np.sin(angle+np.pi/2)],
+        [np.sin(angle+np.pi/2), np.cos(angle+np.pi/2)]
+    ])
+    rotated_vertices = np.dot(rotation_matrix, vertices.T).T
+
+    return Polygon(rotated_vertices, closed=True, color='k', clip_on=False, transform=transform)
 
 
 def get_angles_from_uv(u, v, degrees=False, angle_offset=None):
