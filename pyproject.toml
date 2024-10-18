@@ -8,9 +8,9 @@ packages = [{ include = "topotem" }]
 
 [tool.poetry.dependencies]
 python = "<3.13"
-hyperspy = "^2.0.0"
+hyperspy = ">=2.0.0"
 hyperspy-gui-ipywidgets = "^1.5.0"
-hyperspy-gui-traitsui = "^1.5.2"
+hyperspy-gui-traitsui = ">=1.5.2"
 atomap = "^0.4.0"
 matplotlib-scalebar = "^0.8.1"
 colorcet = "^3.0.1"
