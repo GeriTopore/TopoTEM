@@ -7,6 +7,15 @@ As TopoTEM is still in development, first clone this repository on your personal
 ```bash
 git clone https://github.com/GeriTopore/TopoTEM.git
 ```
+Make sure that conda is up to date in your `base` environment:
+```bash
+conda update conda
+```
+Create a new conda environment for TopoTEM with Python 3.12:
+```bash
+conda create -n topotem_dev python=3.12
+conda activate topotem_dev
+```
 
 Then through a terminal, change to the TopoTEM directory and use `pip` to install the package as follows:
 
